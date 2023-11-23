@@ -1,0 +1,13 @@
+
+/* Reset 'html' element styles */
+html {
+    filter: none;
+    transition: filter 300ms ease-in;
+}
+
+/* Reset 'img', 'svg', and 'picture' element styles */
+img,
+svg,
+picture {
+    filter: none;
+}

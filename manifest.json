@@ -1,0 +1,28 @@
+{
+    "manifest_version": 3,
+    "name": "Style Injector",
+    "version": "1.0.0",
+    "description": "Inject custom styles into web pages",
+    "permissions": [
+        "scripting",
+        "activeTab"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup/popup.html"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://*/*",
+                "https://*/",
+                "http://*/"
+            ],
+            "js": [
+                "content-script.js"
+            ]
+        }
+    ]
+}

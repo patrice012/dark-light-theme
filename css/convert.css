@@ -1,0 +1,13 @@
+
+/* apply cutom CSS */
+html {
+    filter: invert(1) hue-rotate(180deg);
+    transition: filter 280ms, color 300ms, background-color 300ms ease-in;
+}
+
+/* reset CSS for these tags */
+img,
+svg,
+picture {
+    filter: invert(1) hue-rotate(180deg);
+}
