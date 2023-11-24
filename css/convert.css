@@ -1,4 +1,3 @@
-
 /* apply cutom CSS */
 html {
     filter: invert(1) hue-rotate(180deg);
@@ -8,6 +7,11 @@ html {
 /* reset CSS for these tags */
 img,
 svg,
-picture {
+picture,
+.PlayerBackdrop,
+.img,
+.image,
+.picture,
+.profil {
     filter: invert(1) hue-rotate(180deg);
 }
