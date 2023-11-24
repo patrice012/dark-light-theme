@@ -16,52 +16,78 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
+
 // inject dynamically a css code
-function toggleDarkTheme(tabId) {
-    return (async () => {
-        try {
-            await chrome.scripting
-                .insertCSS({
-                    target: {
-                        tabId: tabId,
-                    },
-                    files: ["css/convert.css"],
-                });
-        } catch (err) {
-            console.error(`failed to insert CSS: ${err}`);
-        }
-    })();
+async function toggleDarkTheme(tabId) {
+    try {
+        await chrome.scripting.insertCSS({
+            target: {
+                tabId: tabId,
+            },
+            files: ["css/convert.css"],
+        });
+        chrome.storage.session.set({ theme: 'dark' }).then(() => {
+            console.log("Black Value was set");
+        });
+    } catch (err) {
+        console.error(`Failed to insert CSS: ${err}`);
+    }
 }
+
 
 // remove a custom css apply
 async function resetTheme(tabId) {
-    return (async () => {
-        try {
-            await chrome.scripting
-                .insertCSS({
-                    target: {
-                        tabId: tabId,
-                    },
-                    files: ["css/reset.css"],
-                });
-        } catch (err) {
-            console.error(`failed to remove CSS: ${err}`);
-        }
-    })();
+    try {
+        await chrome.scripting
+            .insertCSS({
+                target: {
+                    tabId: tabId,
+                },
+                files: ["css/reset.css"],
+            });
+        chrome.storage.session.set({ theme: 'default' }).then(() => {
+            console.log("Default Value was set");
+        });
+    } catch (err) {
+        console.error(`failed to remove CSS: ${err}`);
+    }
 }
 
-// // Run this code every time a new tab is created
-// chrome.tabs.onCreated.addListener(function (tab) {
-//     (async () => {
-//         const [tabs] = await chrome.tabs.query({ active: true, currentWindow: true });
-//         const currentTimer = getCurrentDate();
-//         if (needToToggleDarkTheme(currentTimer, defaultTimer())) {
-//             await toggleDarkTheme(tabs.id)
-//         }
 
-//     })();
-//     console.log('timmer')
+// Create an initial alarm when the extension is installed or updated
+// chrome.runtime.onInstalled.addListener(function () {
+//     setDarkThemeAlarm();
 // });
+
+// // Listen for tab creation
+// chrome.tabs.onCreated.addListener(function (tab) {
+//     checkDarkTheme();
+// });
+
+// // Set the alarm for the next toggle
+// function setDarkThemeAlarm() {
+//     const intervalInMinutes = 1; // Change this to the desired interval
+//     chrome.alarms.create('toggleDarkTheme', { periodInMinutes: intervalInMinutes });
+// }
+
+// // Check if it's time to toggle the dark theme when the alarm fires
+// chrome.alarms.onAlarm.addListener(function (alarm) {
+//     if (alarm.name === 'toggleDarkTheme') {
+//         checkDarkTheme();
+//     }
+// });
+
+
+// Check if it's time to toggle the dark theme
+async function checkDarkTheme() {
+    const [tabs] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const currentTimer = getCurrentDate();
+    if (needToToggleDarkTheme(currentTimer, defaultTimer())) {
+        await toggleDarkTheme(tabs.id);
+    }
+    // Set the alarm for the next toggle
+    setDarkThemeAlarm();
+}
 
 
 // get the current date

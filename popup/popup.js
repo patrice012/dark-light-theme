@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
         (async () => {
             const [tabs] = await chrome.tabs.query({ active: true, currentWindow: true });
             const applyResponse = await chrome.tabs.sendMessage(tabs.id, { type: 'dark', tabId: tabs.id });
-            
+
             if (applyResponse === 'disable') {
                 // disable button if the action is a success
                 convertBtn.disabled = true;
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         (async () => {
             const [tabs] = await chrome.tabs.query({ active: true, currentWindow: true });
             const resetResponse = await chrome.tabs.sendMessage(tabs.id, { type: "reset", tabId: tabs.id });
-            
+
             // disable button if the action is a success
             if (resetResponse === 'disable') {
                 resetBtn.disabled = true;
