@@ -5,15 +5,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // send convert message to content-script
     convertBtn.addEventListener('click', function () {
         (async () => {
-            const convertResponse = await chrome.runtime.sendMessage({ type: "convert" });
-            // do something with response here, not outside the function
+            const [tabs] = await chrome.tabs.query({ active: true, currentWindow: true });
+            const response = await chrome.tabs.sendMessage(tabs.id, { type: 'dark', tabId: tabs.id });
         })();
     });
 
     // send reset message to content-script
     resetBtn.addEventListener('click', function () {
         (async () => {
-            const resetResponse = await chrome.runtime.sendMessage({ type: "reset" });
+            const [tabs] = await chrome.tabs.query({ active: true, currentWindow: true });
+            const resetResponse = await chrome.tabs.sendMessage(tabs.id, { type: "reset", tabId: tabs.id });
         })();
     })
 });

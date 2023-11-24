@@ -1,33 +1,19 @@
 chrome.runtime.onMessage.addListener(
-    async function (request, sender, sendResponse) {
-        const tabId = await getTabId();
-        if (request.type === "convert") {
-            // inject css
-            await convert(tabId);
-            const msg = "convert";
-            // await sendFeedback(msg, tabId)
-        } else if (request.type === 'reset') {
-            // remove register css
-            await reset(tabId);
-            const msg = 'reset'
-            // await sendFeedback(msg, tabId)
-        }
+    function (request, sender, sendResponse) {
+        (async () => {
+            if (request.type === 'dark') {
+                // inject CSS
+                await convert(request.tabId);
+                sendResponse('Apply dark theme')
+            } else if (request.type === 'reset') {
+                // remove register CSS
+                await reset(request.tabId);
+                sendResponse('Reset style');
+            }
+        })();
+        return true;
     }
 );
-
-// notify a content-script
-async function sendFeedback(msg, tabId) {
-    const convertResponse = await chrome.tabs.sendMessage(tabId, { message: msg});
-}
-
-
-// get the current tab's id
-function getTabId() {
-    return (async () => {
-        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
-        return tab.id
-    })();
-}
 
 // inject dynamically a css code
 function convert(tabId) {

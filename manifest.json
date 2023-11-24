@@ -5,7 +5,8 @@
     "description": "Inject custom styles into web pages",
     "permissions": [
         "scripting",
-        "activeTab"
+        "activeTab",
+        "storage"
     ],
     "background": {
         "service_worker": "background.js"
